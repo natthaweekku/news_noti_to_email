@@ -5,4 +5,4 @@ The purpose of this AI agent is to update BBC Thai news. The <Item> tag will be 
 will then be pulled. Following that, it will use AI Cohere to summarize the news and use SMTP Gmail to send the condensed data to an email.
 
 
-pip install requests beautifulsoup4 cohere lxml
+-pip install requests beautifulsoup4 cohere lxml
