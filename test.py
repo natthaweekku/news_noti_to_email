@@ -14,10 +14,10 @@ def setup_environment():
 
     # *** แก้ไขข้อมูลเหล่านี้ให้เป็นของจริง ***
     test_config = {
-         "COHERE_API_KEY": "1sWtnnpdI9U6uE9Kl59QoLbB43jMI8jCvK58NFoc",        # ✅ ใส่ Cohere API Key ที่นี่
-        "EMAIL_SENDER": "pes.sofree01@gmail.com",             # Gmail ของคุณ
-        "EMAIL_RECEIVER": "pee.tep2545@gmail.com",            # อีเมลผู้รับ
-        "EMAIL_PASSWORD": "molcxbsosjtjpzhu"                  # Gmail App Password
+        "COHERE_API_KEY": "xyz122341",        # ✅ ใส่ Cohere API Key ที่นี่
+        "EMAIL_SENDER": "test.123@gmail.com",  # Gmail ของคุณ
+        "EMAIL_RECEIVER": "receiver@gmail.com", # อีเมลผู้รับ
+        "EMAIL_PASSWORD": "xyz123123123"        # Gmail App Password
     }
 
     # ตรวจสอบว่าแก้ไขแล้วหรือยัง
