@@ -25,7 +25,7 @@ def fetch_bbc_thai_rss():
         items = soup.find_all("item")
 
         headlines = []
-        for item in items[:1]:  # เอาแค่ 3 ข่าวล่าสุด
+        for item in items[:3]:  
             title = item.title.get_text(strip=True)
             description = item.description.get_text(strip=True)
             headlines.append(f"{title} - {description}")
