@@ -82,6 +82,7 @@ def send_email(subject, body):
                     📅 สร้างเมื่อ: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} (เวลาไทย)<br>
                     AI News Summarizer Bot By Natthawee
                 </p>
+                
             </div>
         </body>
         </html>
