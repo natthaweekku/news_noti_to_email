@@ -1,8 +1,8 @@
-name: 📈 news_noti_to_mail 
+name: 📈 BBC Thai Daily News Notifier
 
 on:
   schedule:
-    
+    # รันทุกวันเวลา 7:00 AM ตามเวลาไทย (UTC = 0:00)
     - cron: '0 0 * * *'
   workflow_dispatch:
     inputs:
@@ -12,10 +12,10 @@ on:
         default: 'false'
 
 jobs:
-  run-investment-news-agent:
+  run-bbc-news-bot:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    
+
     env:
       COHERE_API_KEY: ${{ secrets.COHERE_API_KEY }}
       EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
@@ -23,34 +23,34 @@ jobs:
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
     steps:
-      - name: 📥 Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-      
-      - name: 🐍 Set up Python
+
+      - name:  Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install requests beautifulsoup4 cohere lxml
+          pip install -r requirements.txt
 
       - name: 🔍 Verify environment variables
         run: |
-          
-          if [ -z "$COHERE_API_KEY" ]; then echo "❌ COHERE_API_KEY is missing"; exit 1; fi
-          if [ -z "$EMAIL_SENDER" ]; then echo "❌ EMAIL_SENDER is missing"; exit 1; fi
-          if [ -z "$EMAIL_RECEIVER" ]; then echo "❌ EMAIL_RECEIVER is missing"; exit 1; fi
-          if [ -z "$EMAIL_PASSWORD" ]; then echo "❌ EMAIL_PASSWORD is missing"; exit 1; fi
-          
+          echo "🔍 Checking required secrets..."
+          [ -z "$COHERE_API_KEY" ] && echo "❌ COHERE_API_KEY is missing" && exit 1
+          [ -z "$EMAIL_SENDER" ] && echo "❌ EMAIL_SENDER is missing" && exit 1
+          [ -z "$EMAIL_RECEIVER" ] && echo "❌ EMAIL_RECEIVER is missing" && exit 1
+          [ -z "$EMAIL_PASSWORD" ] && echo "❌ EMAIL_PASSWORD is missing" && exit 1
+          echo "All required secrets are set"
 
-      - name: Run news_noti_to_mail
+      - name:  Run BBC Thai News Bot
         run: |
           python news_noti.py
-        
-      - name: 📊 Upload logs (if failed)
+
+      - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v3
         with:
