@@ -1,0 +1,61 @@
+name: 📈 news_noti_to_mail 
+
+on:
+  schedule:
+    
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+
+jobs:
+  run-investment-news-agent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    env:
+      COHERE_API_KEY: ${{ secrets.COHERE_API_KEY }}
+      EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+      EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📦 Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install requests beautifulsoup4 cohere lxml
+
+      - name: 🔍 Verify environment variables
+        run: |
+          
+          if [ -z "$COHERE_API_KEY" ]; then echo "❌ COHERE_API_KEY is missing"; exit 1; fi
+          if [ -z "$EMAIL_SENDER" ]; then echo "❌ EMAIL_SENDER is missing"; exit 1; fi
+          if [ -z "$EMAIL_RECEIVER" ]; then echo "❌ EMAIL_RECEIVER is missing"; exit 1; fi
+          if [ -z "$EMAIL_PASSWORD" ]; then echo "❌ EMAIL_PASSWORD is missing"; exit 1; fi
+          
+
+      - name: Run news_noti_to_mail
+        run: |
+          python news_noti.py
+        
+      - name: 📊 Upload logs (if failed)
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: error-logs
+          path: |
+            *.log
+            /tmp/*.log
+          retention-days: 7
